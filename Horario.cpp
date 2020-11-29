@@ -51,21 +51,26 @@ int main()
 		case 1:
 			printf("Cuantas semanas estara impartiendo esta rutina de estudios?\n");
 			scanf("%d", &cant_semanas);
+			system("cls");
 			printf("A continuacion ingrese los datos solicitados:\n");
 			printf("ingrese la cantidad de ramos a rendir en este periodo (maximo 8 ramos)\n");
 			scanf("%d", &cant_ramos);
+			system("cls");
 
 			for (int i = 0; i < cant_ramos; i++)
 			{
 				fflush(stdin);
 				printf("ingrese el nombre del ramo %d:\n", i + 1);
 				scanf("%[^\n]", Ramos[i].nombre_ramo);
+				system("cls");
 				fflush(stdin);
 				printf("ingrese el nombre del profesor que rinde el ramo %d:\n", i + 1);
 				scanf("%[^\n]", Ramos[i].nombre_profe);
+				system("cls");
 				fflush(stdin);
 				printf("pegue el link de ingreso a la clase del ramo %d:\n", i + 1);
 				scanf("%[^\n]", Ramos[i].link_clase);
+				system("cls");
 			}
 
 			int a;
@@ -76,19 +81,51 @@ int main()
 				{
 					printf("Cuantas clases debe asistir el dia %s?\n", dia_semana[i]);
 					scanf("%d", &cant_clases[i]);
+					system("cls");
 
 					for (int j = 0; j < cant_clases[i]; j++)
 					{
+						int b;
+
 						printf("Ingrese la %s clase del dia %s:\n", posicion[j], dia_semana[i]);
 						ramo_seleccionado[i][j] = seleccion_ramo(cant_ramos, Ramos);
 
-						printf("Ingrese la hora de inicio y termino a continuacion (use formato 24Hrs):\n");
+						do
+						{
 
-						printf("Ingrese Hora de inicio en formato 'HH:MM':\n");
-						scanf("%d:%d", &Clases_semanales[i][j].hora_inicio, &Clases_semanales[i][j].minuto_inicio);
+							printf("Ingrese la hora de inicio y termino de '%s' a continuacion (use formato 24Hrs):\n", Ramos[ramo_seleccionado[i][j]].nombre_ramo);
 
-						printf("Ingrese Hora de termino en formato 'HH:MM':\n");
-						scanf("%d:%d", &Clases_semanales[i][j].hora_termino, &Clases_semanales[i][j].minuto_termino);
+							printf("Ingrese Hora de inicio en formato 'HH:MM':\n");
+							scanf("%d:%d", &Clases_semanales[i][j].hora_inicio, &Clases_semanales[i][j].minuto_inicio);
+
+							printf("Ingrese Hora de termino en formato 'HH:MM':\n");
+							scanf("%d:%d", &Clases_semanales[i][j].hora_termino, &Clases_semanales[i][j].minuto_termino);
+
+							if (j != 0)
+							{
+								if (((Clases_semanales[i][j - 1].hora_inicio < Clases_semanales[i][j].hora_inicio) && (Clases_semanales[i][j].hora_inicio < Clases_semanales[i][j - 1].hora_termino)))
+								{
+
+									printf("Este horario ingresado irrumpe dentro de otro horario ingresado anteriormente\n");
+									printf("Desea continuar?\n");
+									printf("1. Si\n");
+									printf("2. No (ingresar un nuevo horario)\n");
+									scanf("%d", &b);
+									system("cls");
+								}
+								else if (((Clases_semanales[i][j - 1].hora_inicio <= Clases_semanales[i][j].hora_inicio) && (Clases_semanales[i][j].hora_inicio <= Clases_semanales[i][j - 1].hora_termino)) && ((Clases_semanales[i][j].minuto_inicio < Clases_semanales[i][j - 1].minuto_termino)))
+								{
+
+									printf("Este horario ingresado irrumpe dentro de otro horario ingresado anteriormente\n");
+									printf("Desea continuar?\n");
+									printf("1. Si\n");
+									printf("2. No (ingresar un nuevo horario)\n");
+									scanf("%d", &b);
+									system("cls");
+								}
+							}
+
+						} while (b == 2);
 					}
 					printf("El Horario del dia %s quedara de la siguiente manera:\n", dia_semana[i]);
 					for (int j = 0; j < cant_clases[i]; j++)
@@ -99,6 +136,7 @@ int main()
 					printf("1. Si\n");
 					printf("2. No (se realizara nuevamente)\n");
 					scanf("%d", &a);
+					system("cls");
 
 				} while (a == 2);
 			}
