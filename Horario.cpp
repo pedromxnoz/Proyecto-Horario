@@ -7,12 +7,33 @@ struct Ramo
 	char nombre_ramo[30];
 	char nombre_profe[30];
 	char link_clase[120];
-} Ramos[8];
+};
+
+struct Clase
+{
+	int hora_inicio;
+	int minuto_inicio;
+	int hora_termino;
+	int minuto_termino;
+} Clases_semanales[7][12];
+
+struct Evento
+{
+	int semana;
+};
+
+int seleccion_ramo(int cant_ramos, Ramo Ramos[8]);
 
 int main()
 {
+	Ramo Ramos[8];
+	Evento Eventos_diarios[16];
+	int cant_clases[7];
+	char dia_semana[7][12] = {"lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"};
+	char posicion[12][10] = {"primera", "segunda", "tercera", "cuarta", "quinta", "sexta", "septima", "octava", "novena", "decima", "undecima", "duodecima"};
 	bool horario_creado = 0;
 	int opcion_selec;
+	int ramo_seleccionado[7][8];
 	int cant_semanas;
 	int cant_ramos;
 
@@ -46,6 +67,43 @@ int main()
 				printf("pegue el link de ingreso a la clase del ramo %d:\n", i + 1);
 				scanf("%[^\n]", Ramos[i].link_clase);
 			}
+			
+			int a;
+
+			for (int i = 0; i <= 7; i++)
+			{
+				do{
+				printf("Cuantas clases debe asistir el dia %s?\n", dia_semana[i]);
+				scanf("%d", &cant_clases[i]);
+
+				for (int j = 0; j < cant_clases[i]; j++)
+				{
+					printf("Ingrese la %s clase del dia %s:\n", posicion[j], dia_semana[i]);
+					ramo_seleccionado[i][j] = seleccion_ramo(cant_ramos, Ramos);
+
+					printf("Ingrese la hora de inicio y termino a continuacion (use formato 24Hrs):\n");
+
+					printf("Ingrese Hora de inicio en formato 'HH:MM':\n");
+					scanf("%d:%d", &Clases_semanales[i][j].hora_inicio, &Clases_semanales[i][j].minuto_inicio);
+
+					printf("Ingrese Hora de termino en formato 'HH:MM':\n");
+					scanf("%d:%d", &Clases_semanales[i][j].hora_termino, &Clases_semanales[i][j].minuto_termino);
+				}
+				printf("El Horario del dia %s quedara de la siguiente manera:\n", dia_semana[i]);
+				for (int j = 0; j < cant_clases[i]; j++)
+				{
+					printf("[%d] %s (%d:%d) - (%d:%d)\n", j + 1, Ramos[ramo_seleccionado[i][j]].nombre_ramo, Clases_semanales[i][j].hora_inicio, Clases_semanales[i][j].minuto_inicio, Clases_semanales[i][j].hora_termino, Clases_semanales[i][j].minuto_termino);
+					
+				}
+				    printf("Es correcta la informacion?\n");
+				    printf("1. Si\n");
+					printf("2. No (se realizara nuevamente)\n");
+					scanf("%d", &a);
+					
+					}while(a == 2);
+			}
+			
+			
 
 			break;
 		case 2:
@@ -71,4 +129,23 @@ int main()
 	}
 
 	return 0;
+}
+
+int seleccion_ramo(int cant_ramos, Ramo Ramos[8])
+{
+	int a;
+	printf("Seleccione un ramo:\n");
+	for (int i = 0; i < cant_ramos; i++)
+	{
+		printf("%d.%s\n", i + 1, Ramos[i].nombre_ramo);
+	}
+	scanf("%d", &a);
+
+	while ((a <= 0) || (a > (cant_ramos + 1)))
+	{
+		printf("Error, Ingrese una opcion valida\n");
+		scanf("%d", &a);
+	}
+	a = a - 1;
+	return a;
 }
